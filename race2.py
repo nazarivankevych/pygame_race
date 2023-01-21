@@ -6,8 +6,8 @@ pygame.init()
 # set up dimensions
 display_width = 800
 display_height = 800
-car_width = 100
-car_height = 100
+obj_width = 100
+obj_height = 100
 # RGB colors
 black = (0, 0, 0)
 white = (255, 255, 255)
@@ -23,7 +23,7 @@ pygame.display.set_caption('Crazy Racing')
 clock = pygame.time.Clock()
 # Sprite for car
 carImg = pygame.image.load('img/car.jpeg')
-carImg = pygame.transform.scale(carImg, (car_width, car_height))
+carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 
 
 def car(x, y):
@@ -32,16 +32,14 @@ def car(x, y):
 
 def obstacle(obs_startx, obs_starty, obs):
     global obs_pic
-    # # rgb = RED, GREEN, BLUE
-    # # gameDisplay.fill((0, 0, 0))
-    # # background image set up
+    # background image set up
     gameDisplay.blit(background, (0, 0))
     if obs == 0:
-        obs_pic = pygame.image.load('img/tree.jpeg')
-        obs_pic = pygame.transform.scale(obs_pic, (car_width, car_height))
+        obs_pic = pygame.image.load('img/car2.png')
+        obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
     elif obs == 1:
-        obs_pic = pygame.image.load('img/ball.png')
-        obs_pic = pygame.transform.scale(obs_pic, (car_width, car_height))
+        obs_pic = pygame.image.load('img/car3.png')
+        obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
     gameDisplay.blit(obs_pic, (obs_startx, obs_starty))
 
 
@@ -99,13 +97,16 @@ def gameloop():
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
 
+            # if event.type == pygame.K_SPACE:
+            #     clock.tick(60)
+
         x += x_change
         gameDisplay.fill(white)
 
         obstacle(obs_startx, obs_starty, obs)
         obs_starty += obs_speed
         car(x, y)
-        if x > display_width - car_width or x < 0:
+        if x > display_width - obj_width or x < 0:
             crash()
         if obs_starty > display_height:
             obs_starty = 0 - obs_height
@@ -113,7 +114,7 @@ def gameloop():
             obs = random.randrange(0, 2)
 
         if y < obs_starty + obs_height:
-            if obs_startx < x < obs_startx + obs_width or obs_startx < x + car_width < obs_startx + obs_width:
+            if obs_startx < x < obs_startx + obs_width or obs_startx < x + obj_width < obs_startx + obs_width:
                 crash()
             
         pygame.display.update()
