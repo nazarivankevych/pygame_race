@@ -92,13 +92,14 @@ def gameloop():
                     x_change = -5
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
+                if event.key == pygame.K_SPACE:
+                    obs_speed *= 2
+                if event.key == pygame.K_LALT:
+                    obs_speed /= 2
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     x_change = 0
-
-            # if event.type == pygame.K_SPACE:
-            #     clock.tick(60)
 
         x += x_change
         gameDisplay.fill(white)
