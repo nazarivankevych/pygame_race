@@ -29,6 +29,8 @@ carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
 count_time = 5
 start_ticks = pygame.time.get_ticks()
+# text which we see after finishing
+finish_text = 'You win this Crazy Racing GAME ;)'
 
 
 def car(x, y):
@@ -75,7 +77,11 @@ def crash():
 
 
 def finish():
-    message_display('You win this Crazy Racing GAME ;)')
+    largetext = pygame.font.Font('freesansbold.ttf', 40)
+    textsurf, textrect = text_objects(finish_text, largetext)
+    textrect.center = ((display_width / 2), (display_height / 2))
+    gameDisplay.blit(textsurf, textrect)
+    pygame.display.update()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -95,6 +101,7 @@ def gameloop():
     object_width = 80
     object_height = 80
     obj = random.randrange(0, 3)
+    finish_line = 800
 
     gameExit = False
 
@@ -140,16 +147,16 @@ def gameloop():
         if y < obj_starty + object_height:
             if obj_startx < x < obj_startx + object_width or obj_startx < x + object_width < obj_startx + object_width:
                 crash()
-            else:
-                finish()
-
+        # set timer for creating a finish line after short time
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
         if seconds > 5:
             obj_pic = pygame.image.load('img/finish_line.png')
             obj_pic = pygame.transform.scale(obj_pic, (550, 80))
             finish_line = obj_starty - 300
             gameDisplay.blit(obj_pic, (128, finish_line))
-            print(seconds)
+            # Inform user about finishing
+            if finish_line < 200:
+                finish()
 
         pygame.display.update()
         game_clock.tick(60)
