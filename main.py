@@ -24,7 +24,7 @@ pygame.display.set_caption('Crazy Racing')
 # FPS of screen
 game_clock = pygame.time.Clock()
 # Sprite for car
-carImg = pygame.image.load('img/car.jpeg')
+carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
 count_time = 5
