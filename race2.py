@@ -1,8 +1,11 @@
 # imports for game
 import pygame
 import random
+from timer_finish import timer
 
 pygame.init()
+# create a key pressed
+key_input = pygame.key.get_pressed()
 # set up dimensions
 display_width = 800
 display_height = 800
@@ -31,16 +34,16 @@ def car(x, y):
 
 
 def obstacle(obs_startx, obs_starty, obs):
-    global obs_pic
+    global obj_pic
     # background image set up
     gameDisplay.blit(background, (0, 0))
     if obs == 0:
-        obs_pic = pygame.image.load('img/car2.png')
-        obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
+        obj_pic = pygame.image.load('img/car2.png')
+        obj_pic = pygame.transform.scale(obj_pic, (obj_width-35, obj_height+10))
     elif obs == 1:
-        obs_pic = pygame.image.load('img/car3.png')
-        obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
-    gameDisplay.blit(obs_pic, (obs_startx, obs_starty))
+        obj_pic = pygame.image.load('img/car3.png')
+        obj_pic = pygame.transform.scale(obj_pic, (obj_width-35, obj_height+10))
+    gameDisplay.blit(obj_pic, (obs_startx, obs_starty))
 
 
 def text_objects(text, font):
@@ -72,12 +75,12 @@ def gameloop():
 
     x_change = 0
 
-    obs_startx = random.randrange(200, (display_width-200))
-    obs_starty = -750
-    obs_speed = 7
-    obs_width = 80
-    obs_height = 80
-    obs = random.randrange(0, 2)
+    obj_startx = random.randrange(200, (display_width-200))
+    obj_starty = -750
+    obj_speed = 7
+    obj_width = 80
+    obj_height = 80
+    obj = random.randrange(0, 2)
 
     gameExit = False
 
@@ -86,16 +89,16 @@ def gameloop():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-
+            # Events for keybords Up, Right, Left, SPACE, Left ALT
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     x_change = -5
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
                 if event.key == pygame.K_SPACE:
-                    obs_speed *= 2
+                    obj_speed *= 2
                 if event.key == pygame.K_LALT:
-                    obs_speed /= 2
+                    obj_speed /= 2
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -104,18 +107,18 @@ def gameloop():
         x += x_change
         gameDisplay.fill(white)
 
-        obstacle(obs_startx, obs_starty, obs)
-        obs_starty += obs_speed
+        obstacle(obj_startx, obj_starty, obj)
+        obj_starty += obj_speed
         car(x, y)
         if x > display_width - obj_width or x < 0:
             crash()
-        if obs_starty > display_height:
-            obs_starty = 0 - obs_height
-            obs_startx = random.randrange(150, (display_width - 150))
-            obs = random.randrange(0, 2)
+        if obj_starty > display_height:
+            obj_starty = 0 - obj_height
+            obj_startx = random.randrange(150, (display_width - 150))
+            obj = random.randrange(0, 2)
 
-        if y < obs_starty + obs_height:
-            if obs_startx < x < obs_startx + obs_width or obs_startx < x + obj_width < obs_startx + obs_width:
+        if y < obj_starty + obj_height:
+            if obj_startx < x < obj_startx + obj_width or obj_startx < x + obj_width < obj_startx + obj_width:
                 crash()
             
         pygame.display.update()

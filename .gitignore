@@ -1,0 +1,6 @@
+#dirs
+pygame_race/.idea/
+venv/
+__pycache__/
+#files
+race_pygame.zip
