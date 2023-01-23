@@ -27,7 +27,7 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 5
+count_time = 60
 start_ticks = pygame.time.get_ticks()
 # text which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
@@ -50,7 +50,7 @@ def obstacle(obj_startx, obj_starty, obj):
             obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
         gameDisplay.blit(obs_pic, (obj_startx, obj_starty))
     except UnboundLocalError:
-        pass
+        gameloop()
 
 
 def text_objects(text, font):
@@ -138,18 +138,17 @@ def gameloop():
 
         if x > display_width - object_width or x < 0:
             crash()
-
         if obj_starty > display_height:
             obj_starty = 0 - object_height
             obj_startx = random.randrange(150, (display_width - 150))
             obj = random.randrange(0, 2)
-
+        # colissions with another objects and borders
         if y < obj_starty + object_height:
             if obj_startx < x < obj_startx + object_width or obj_startx < x + object_width < obj_startx + object_width:
                 crash()
         # set timer for creating a finish line after short time
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
-        if seconds > 5:
+        if seconds > count_time:
             obj_pic = pygame.image.load('img/finish_line.png')
             obj_pic = pygame.transform.scale(obj_pic, (550, 80))
             finish_line = obj_starty - 300
