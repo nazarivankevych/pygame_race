@@ -3,8 +3,7 @@ import pygame
 import random
 
 pygame.init()
-# create a key pressed
-key_input = pygame.key.get_pressed()
+
 # set up dimensions
 display_width = 800
 display_height = 800
@@ -27,11 +26,13 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 60
+count_time = 5
 start_ticks = pygame.time.get_ticks()
-# text which we see after finishing
+# text and picture which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
-
+obj_pic = pygame.image.load('img/finish_line.png')
+finish_height = 80
+finish_width = 550
 
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
@@ -88,8 +89,10 @@ def finish():
                 pygame.quit()
                 quit()
 
+
 def gameloop():
 
+    global obj_pic
     x = (display_width * 0.45)
     y = (display_height * 0.8)
 
@@ -98,10 +101,9 @@ def gameloop():
     obj_startx = random.randrange(200, (display_width-200))
     obj_starty = -750
     obj_speed = 7
-    object_width = 80
-    object_height = 80
+    object_width = 50
+    object_height = 90
     obj = random.randrange(0, 3)
-    finish_line = 800
 
     gameExit = False
 
@@ -114,6 +116,7 @@ def gameloop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     x_change = -5
+
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
                 if event.key == pygame.K_SPACE:
@@ -136,13 +139,15 @@ def gameloop():
         obj_starty += obj_speed
         car(x, y)
 
-        if x > display_width - object_width or x < 0:
+        # colissions with borders
+        if x > (display_width - 155) - object_width or x < 108:
             crash()
+        # generate cars in different places of road
         if obj_starty > display_height:
             obj_starty = 0 - object_height
             obj_startx = random.randrange(150, (display_width - 150))
             obj = random.randrange(0, 2)
-        # colissions with another objects and borders
+        # colissions with another cars
         if y < obj_starty + object_height:
             if obj_startx < x < obj_startx + object_width or obj_startx < x + object_width < obj_startx + object_width:
                 crash()
