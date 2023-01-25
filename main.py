@@ -26,13 +26,14 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 30
+count_time = 20
 start_ticks = pygame.time.get_ticks()
 # text and picture which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
 obj_pic = pygame.image.load('img/finish_line.png')
 finish_height = 80
-finish_width = 550
+finish_width = 540
+
 
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
@@ -77,6 +78,16 @@ def crash():
                 quit()
 
 
+def reveal_finish(line_startx, line_starty):
+    # create values for generated finish
+    try:
+        obs_pic = pygame.image.load('img/finish_line.png')
+        obs_pic = pygame.transform.scale(obs_pic, (finish_width, finish_height))
+        gameDisplay.blit(obs_pic, (line_startx, line_starty))
+    except UnboundLocalError:
+        gameloop()
+
+
 def finish():
     largetext = pygame.font.Font('freesansbold.ttf', 40)
     textsurf, textrect = text_objects(finish_text, largetext)
@@ -98,12 +109,14 @@ def gameloop():
 
     x_change = 0
 
-    obj_startx = random.randrange(200, (display_width-200))
+    obj_startx = random.randrange(165, (display_width-150))
     obj_starty = -750
+    line_startx = 135
+    line_starty = 10
     obj_speed = 7
     object_width = 50
     object_height = 90
-    obj = random.randrange(0, 3)
+    obj = random.randrange(0, 2)
 
     gameExit = False
 
@@ -132,8 +145,7 @@ def gameloop():
                 quit()
 
         x += x_change
-        gameDisplay.fill(white)
-
+        # reveal_finish(line_startx, line_starty)
         obstacle(obj_startx, obj_starty, obj)
         obj_starty += obj_speed
         car(x, y)
@@ -144,7 +156,7 @@ def gameloop():
         # generate cars in different places of road
         if obj_starty > display_height:
             obj_starty = 0 - object_height
-            obj_startx = random.randrange(150, (display_width - 150))
+            obj_startx = random.randrange(155, (display_width - 180))
             obj = random.randrange(0, 2)
         # colissions with another cars
         if y < obj_starty + object_height:
@@ -153,13 +165,13 @@ def gameloop():
         # set timer for creating a finish line after short time
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
         if seconds > count_time:
-            obj_pic = pygame.image.load('img/finish_line.png')
-            obj_pic = pygame.transform.scale(obj_pic, (550, 80))
-            finish_line = obj_starty - 300
-            gameDisplay.blit(obj_pic, (128, finish_line))
-            # Inform user about finishing
-            if finish_line < 200:
-                finish()
+            if line_starty < display_height:
+                reveal_finish(line_startx, line_starty)
+                line_starty += 3
+                # Inform user about finishing
+                if line_starty > y:
+                    gameDisplay.blit(carImg, (x, y))
+                    finish()
 
         pygame.display.update()
         game_clock.tick(60)
