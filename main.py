@@ -26,7 +26,7 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 5
+count_time = 30
 start_ticks = pygame.time.get_ticks()
 # text and picture which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
@@ -116,7 +116,6 @@ def gameloop():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     x_change = -5
-
                 if event.key == pygame.K_RIGHT:
                     x_change = 5
                 if event.key == pygame.K_SPACE:
