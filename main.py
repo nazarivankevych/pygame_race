@@ -26,7 +26,7 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 20
+count_time = 10
 start_ticks = pygame.time.get_ticks()
 # text and picture which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
@@ -114,6 +114,7 @@ def gameloop():
     line_startx = 135
     line_starty = 10
     obj_speed = 7
+    line_speed = 7
     object_width = 50
     object_height = 90
     obj = random.randrange(0, 2)
@@ -133,8 +134,10 @@ def gameloop():
                     x_change = 5
                 if event.key == pygame.K_SPACE:
                     obj_speed *= 2
+                    line_speed *= 2
                 if event.key == pygame.K_LALT:
                     obj_speed /= 2
+                    line_speed /= 2
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -145,7 +148,6 @@ def gameloop():
                 quit()
 
         x += x_change
-        # reveal_finish(line_startx, line_starty)
         obstacle(obj_startx, obj_starty, obj)
         obj_starty += obj_speed
         car(x, y)
@@ -167,7 +169,7 @@ def gameloop():
         if seconds > count_time:
             if line_starty < display_height:
                 reveal_finish(line_startx, line_starty)
-                line_starty += 3
+                line_starty += line_speed
                 # Inform user about finishing
                 if line_starty > y:
                     gameDisplay.blit(carImg, (x, y))
