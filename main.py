@@ -26,7 +26,7 @@ game_clock = pygame.time.Clock()
 carImg = pygame.image.load('img/car.png')
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
-count_time = 10
+count_time = 60
 start_ticks = pygame.time.get_ticks()
 # text and picture which we see after finishing
 finish_text = 'You win this Crazy Racing GAME ;)'
@@ -39,8 +39,9 @@ def car(x, y):
     gameDisplay.blit(carImg, (x, y))
 
 
-def obstacle(obj_startx, obj_starty, obj):
+def obstacle(car_startx, car_starty, obj):
     # background image set up
+    global obs_pic
     gameDisplay.blit(background, (0, 0))
     # create values for generated objects
     try:
@@ -50,7 +51,13 @@ def obstacle(obj_startx, obj_starty, obj):
         elif obj == 1:
             obs_pic = pygame.image.load('img/car3.png')
             obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
-        gameDisplay.blit(obs_pic, (obj_startx, obj_starty))
+        elif obj == 2:
+            obs_pic = pygame.image.load('img/tree.png')
+            obs_pic = pygame.transform.scale(obs_pic, (obj_width-20, obj_height+10))
+        elif obj == 3:
+            obs_pic = pygame.image.load('img/ball.png')
+            obs_pic = pygame.transform.scale(obs_pic, (obj_width-15, obj_height+10))
+        gameDisplay.blit(obs_pic, (car_startx, car_starty))
     except UnboundLocalError:
         gameloop()
 
@@ -81,9 +88,9 @@ def crash():
 def reveal_finish(line_startx, line_starty):
     # create values for generated finish
     try:
-        obs_pic = pygame.image.load('img/finish_line.png')
-        obs_pic = pygame.transform.scale(obs_pic, (finish_width, finish_height))
-        gameDisplay.blit(obs_pic, (line_startx, line_starty))
+        finish_img = pygame.image.load('img/finish_line.png')
+        finish_img = pygame.transform.scale(finish_img, (finish_width, finish_height))
+        gameDisplay.blit(finish_img, (line_startx, line_starty))
     except UnboundLocalError:
         gameloop()
 
@@ -117,11 +124,11 @@ def gameloop():
     line_speed = 7
     object_width = 50
     object_height = 90
-    obj = random.randrange(0, 2)
+    obj = random.randrange(0, 4)
 
-    gameExit = False
+    game_exit = False
 
-    while not gameExit:
+    while not game_exit:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -161,8 +168,9 @@ def gameloop():
             obj_startx = random.randrange(155, (display_width - 180))
             obj = random.randrange(0, 2)
         # colissions with another cars
-        if y < obj_starty + object_height:
-            if obj_startx < x < obj_startx + object_width or obj_startx < x + object_width < obj_startx + object_width:
+        if y <= obj_starty + object_height:
+            if obj_startx <= x <= obj_startx + object_width or \
+                    obj_startx <= x + object_width <= obj_startx + object_width:
                 crash()
         # set timer for creating a finish line after short time
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
