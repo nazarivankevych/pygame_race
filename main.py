@@ -1,4 +1,3 @@
-# imports for game
 import pygame
 import random
 
@@ -16,21 +15,21 @@ red = (255, 0, 0)
 # Set a width and height of screen
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 # Set a background
-background = pygame.image.load('img/background.png')
+background = pygame.image.load("img/background.png")
 background = pygame.transform.scale(background, (display_width, display_height))
 # Name of app
-pygame.display.set_caption('Crazy Racing')
+pygame.display.set_caption("Crazy Racing")
 # FPS of screen
 game_clock = pygame.time.Clock()
 # Sprite for car
-carImg = pygame.image.load('img/car.png')
+carImg = pygame.image.load("img/car.png")
 carImg = pygame.transform.scale(carImg, (obj_width, obj_height))
 # time for finish
 count_time = 10
 start_ticks = pygame.time.get_ticks()
 # text and picture which we see after finishing
-finish_text = 'You win this Crazy Racing GAME ;)'
-obj_pic = pygame.image.load('img/finish_line.png')
+finish_text = "You win this Crazy Racing GAME ;)"
+obj_pic = pygame.image.load("img/finish_line.png")
 finish_height = 80
 finish_width = 540
 
@@ -45,11 +44,11 @@ def obstacle(obj_startx, obj_starty, obj):
     # create values for generated objects
     try:
         if obj == 0:
-            obs_pic = pygame.image.load('img/car2.png')
-            obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
+            obs_pic = pygame.image.load("img/car2.png")
+            obs_pic = pygame.transform.scale(obs_pic, (obj_width - 35, obj_height + 10))
         elif obj == 1:
-            obs_pic = pygame.image.load('img/car3.png')
-            obs_pic = pygame.transform.scale(obs_pic, (obj_width-35, obj_height+10))
+            obs_pic = pygame.image.load("img/car3.png")
+            obs_pic = pygame.transform.scale(obs_pic, (obj_width - 35, obj_height + 10))
         gameDisplay.blit(obs_pic, (obj_startx, obj_starty))
     except UnboundLocalError:
         gameloop()
@@ -61,16 +60,16 @@ def text_objects(text, font):
 
 
 def message_display(text):
-    largetext = pygame.font.Font('freesansbold.ttf', 115)
+    largetext = pygame.font.Font("freesansbold.ttf", 115)
     textsurf, textrect = text_objects(text, largetext)
-    textrect.center = ((display_width/2), (display_height/2))
+    textrect.center = ((display_width / 2), (display_height / 2))
     gameDisplay.blit(textsurf, textrect)
 
     pygame.display.update()
 
 
 def crash():
-    message_display('You Crashed')
+    message_display("You Crashed")
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -81,7 +80,7 @@ def crash():
 def reveal_finish(line_startx, line_starty):
     # create values for generated finish
     try:
-        obs_pic = pygame.image.load('img/finish_line.png')
+        obs_pic = pygame.image.load("img/finish_line.png")
         obs_pic = pygame.transform.scale(obs_pic, (finish_width, finish_height))
         gameDisplay.blit(obs_pic, (line_startx, line_starty))
     except UnboundLocalError:
@@ -89,7 +88,7 @@ def reveal_finish(line_startx, line_starty):
 
 
 def finish():
-    largetext = pygame.font.Font('freesansbold.ttf', 40)
+    largetext = pygame.font.Font("freesansbold.ttf", 40)
     textsurf, textrect = text_objects(finish_text, largetext)
     textrect.center = ((display_width / 2), (display_height / 2))
     gameDisplay.blit(textsurf, textrect)
@@ -104,12 +103,12 @@ def finish():
 def gameloop():
 
     global obj_pic
-    x = (display_width * 0.45)
-    y = (display_height * 0.8)
+    x = display_width * 0.45
+    y = display_height * 0.8
 
     x_change = 0
 
-    obj_startx = random.randrange(165, (display_width-150))
+    obj_startx = random.randrange(165, (display_width - 150))
     obj_starty = -750
     line_startx = 135
     line_starty = 10
@@ -162,7 +161,10 @@ def gameloop():
             obj = random.randrange(0, 2)
         # colissions with another cars
         if y < obj_starty + object_height:
-            if obj_startx < x < obj_startx + object_width or obj_startx < x + object_width < obj_startx + object_width:
+            if (
+                obj_startx < x < obj_startx + object_width
+                or obj_startx < x + object_width < obj_startx + object_width
+            ):
                 crash()
         # set timer for creating a finish line after short time
         seconds = (pygame.time.get_ticks() - start_ticks) / 1000
