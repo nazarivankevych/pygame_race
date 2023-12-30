@@ -1,45 +1,50 @@
+"""Import modules"""
 import random
+
 import pygame
+from pygame.constants import (
+    QUIT, KEYUP, KEYDOWN, K_LALT, K_SPACE, K_LEFT, K_RIGHT
+)
 
 pygame.init()
 
-# set up dimensions
+"""Set up dimensions"""
 DISPLAY_WIDTH = 800
 DISPLAY_HEIGTH = 800
 OBJ_WIDTH = 100
 OBJ_HEIGTH = 100
-# RGB colors
+"""RGB colors"""
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
-# Set a width and height of screen
+"""Set a width and height of screen"""
 gameDisplay = pygame.display.set_mode((DISPLAY_WIDTH, DISPLAY_HEIGTH))
-# Set a background
+"""Set a background"""
 background = pygame.image.load("img/background.png")
 background = pygame.transform.scale(background, (DISPLAY_WIDTH, DISPLAY_HEIGTH))
-# Name of app
+"""Name of app"""
 pygame.display.set_caption("Crazy Racing")
-# FPS of screen
+"""FPS of screen"""
 game_clock = pygame.time.Clock()
-# Sprite for car
+"""Sprite for car"""
 carImg = pygame.image.load("img/car.png")
 carImg = pygame.transform.scale(carImg, (OBJ_WIDTH, OBJ_HEIGTH))
-# time for finish
+"""Time for finish"""
 COUNT_TIME = 10
 start_ticks = pygame.time.get_ticks()
-# text and picture which we see after finishing
+"""Text and picture which we see after finishing"""
 FINISH_TEXT = "You win this Crazy Racing GAME ;)"
 obj_pic = pygame.image.load("img/finish_line.png")
 FINISH_HEIGTH = 80
 FINISH_WIDTH = 540
 
 
-# set a car on the ground
+"""Set a car on the ground"""
 def car(x, y):
     gameDisplay.blit(carImg, (x, y))
 
 
-# configure an obstacles for the car
+"""Configure an obstacles for the car"""
 def obstacle(obj_startx, obj_starty, obj):
     # background image set up
     gameDisplay.blit(background, (0, 0))
@@ -56,13 +61,13 @@ def obstacle(obj_startx, obj_starty, obj):
         gameloop()
 
 
-# render objects on the ground
+"""Render objects on the ground"""
 def text_objects(text, font):
     textsurface = font.render(text, True, black)
     return textsurface, textsurface.get_rect()
 
 
-# set a message acording to the situation with player
+"""Set a message acording to the situation with player"""
 def message_display(text):
     largetext = pygame.font.Font("freesansbold.ttf", 115)
     textsurf, textrect = text_objects(text, largetext)
@@ -72,7 +77,7 @@ def message_display(text):
     pygame.display.update()
 
 
-# set a message after crashing from objects
+"""Set a message after crashing from objects"""
 def crash():
     message_display("You Crashed")
     while True:
@@ -82,18 +87,18 @@ def crash():
                 quit()
 
 
-# after some time reveal a finish line for winning
+"""After some time reveal a finish line for winning"""
 def reveal_finish(line_startx, line_starty):
     # create values for generated finish
     try:
         obs_pic = pygame.image.load("img/finish_line.png")
-        obs_pic = pygame.transform.scale(obs_pic, (FINISH_WIDTH,FINISH_HEIGTH))
+        obs_pic = pygame.transform.scale(obs_pic, (FINISH_WIDTH, FINISH_HEIGTH))
         gameDisplay.blit(obs_pic, (line_startx, line_starty))
     except UnboundLocalError:
         gameloop()
 
 
-# set a text message for winning
+"""Set a text message for winning"""
 def finish():
     largetext = pygame.font.Font("freesansbold.ttf", 40)
     textsurf, textrect = text_objects(FINISH_TEXT, largetext)
@@ -107,10 +112,10 @@ def finish():
                 quit()
 
 
-# running whole game with cars and abstacles parameters for the player
+"""Running whole game with cars and abstacles parameters for the player"""
 def gameloop():
-
     global obj_pic
+
     x = DISPLAY_WIDTH * 0.45
     y = DISPLAY_HEIGTH * 0.8
 
@@ -130,27 +135,26 @@ def gameloop():
 
     while not game_exit:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 pygame.quit()
                 quit()
             # Events for keybords Up, Right, Left, SPACE, Left ALT
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+            if event.type == KEYDOWN:
+                if event.key == K_LEFT:
                     x_change = -5
-                if event.key == pygame.K_RIGHT:
+                if event.key == K_RIGHT:
                     x_change = 5
-                if event.key == pygame.K_SPACE:
+                if event.key == K_SPACE:
                     obj_speed *= 2
                     line_speed *= 2
-                if event.key == pygame.K_LALT:
+                if event.key == K_LALT:
                     obj_speed /= 2
                     line_speed /= 2
 
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    x_change = 0
+            if event.type == KEYUP and (event.key == K_LEFT or event.key == K_RIGHT):
+                x_change = 0
 
-            if event.type == pygame.QUIT:
+            if event.type == QUIT:
                 pygame.quit()
                 quit()
 
